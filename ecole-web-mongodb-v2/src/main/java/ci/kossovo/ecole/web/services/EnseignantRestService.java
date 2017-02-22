@@ -1,4 +1,4 @@
-package ci.kossovo.ecole.web.services;
+/*package ci.kossovo.ecole.web.services;
 
 import java.util.List;
 
@@ -9,12 +9,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ci.kossovo.ecole.entity.Personne;
 import ci.kossovo.ecole.exceptions.InvalidPersonneException;
-import ci.kossovo.ecole.web.models.personne.ApplicationModelPersonne;
+import ci.kossovo.ecole.web.models.personne.ApplicationModelEtudiant;
 
 @RestController
 public class EnseignantRestService {
 	@Autowired
-	private ApplicationModelPersonne modelPersonne;
+	private ApplicationModelEtudiant modelPersonne;
 
 	@Autowired
 	private ObjectMapper jsonMapper;
@@ -66,3 +66,4 @@ public class EnseignantRestService {
 	
 
 }
+*/

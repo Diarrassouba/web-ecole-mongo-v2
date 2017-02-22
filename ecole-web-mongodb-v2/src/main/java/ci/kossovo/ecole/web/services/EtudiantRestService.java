@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,15 +24,16 @@ import ci.kossovo.ecole.entity.Etudiant;
 import ci.kossovo.ecole.entity.Personne;
 import ci.kossovo.ecole.exceptions.InvalidPersonneException;
 import ci.kossovo.ecole.web.models.Reponse;
-import ci.kossovo.ecole.web.models.personne.ApplicationModelPersonne;
+import ci.kossovo.ecole.web.models.personne.ApplicationModelEtudiant;
 import ci.kossovo.ecole.web.models.personne.PostAjoutEtudiant;
 import ci.kossovo.ecole.web.models.personne.PostModifEtudiant;
 import ci.kossovo.ecole.web.utilitaires.Static;
 
+@CrossOrigin
 @RestController
 public class EtudiantRestService {
 	@Autowired
-	private ApplicationModelPersonne modelPersonne;
+	private ApplicationModelEtudiant modelEtudiant;
 
 	@Autowired
 	private ObjectMapper jsonMapper;
@@ -42,7 +44,7 @@ public class EtudiantRestService {
 		Etudiant etud = null;
 
 		try {
-			etud = (Etudiant) modelPersonne.find(id);
+			etud = (Etudiant) modelEtudiant.find(id);
 		} catch (RuntimeException e) {
 			return new Reponse<>(1, Static.getErreurforexception(e), null);
 		}
@@ -92,7 +94,7 @@ public class EtudiantRestService {
 			entity.setDateNaissance(naissance);
 
 			try {
-				reponse = new Reponse<Etudiant>(0, null, (Etudiant) modelPersonne.creer(entity));
+				reponse = new Reponse<Etudiant>(0, null, (Etudiant) modelEtudiant.creer(entity));
 			} catch (InvalidPersonneException e) {
 				reponse = new Reponse<Etudiant>(1, Static.getErreurforexception(e), null);
 			}
@@ -146,7 +148,7 @@ public class EtudiantRestService {
 			if (!erreur) {
 				try {
 					// modifier l'etudiant
-					Etudiant entity = (Etudiant) modelPersonne.modifier(et);
+					Etudiant entity = (Etudiant) modelEtudiant.modifier(et);
 					reponse = new Reponse<Etudiant>(0, null, entity);
 				} catch (InvalidPersonneException e) {
 					// problème de modification
@@ -168,21 +170,21 @@ public class EtudiantRestService {
 	// liste des etudiants
 	@GetMapping("/etudiants")
 	public String listEtudiants() throws JsonProcessingException {
-		Reponse<List<Personne>> reponse = null;
+		Reponse<List<Etudiant>> reponse = null;
 		try {
-			List<Personne> etudiants =modelPersonne.listEtudiants();
+			List<Etudiant> etudiants =modelEtudiant.findAll();
 			// List<Personne> etudiants=modelPersonne.personneAll("ET");
 			//List<Personne> ets=etudiants.stream().filter(p->p.getClass()==Etudiant.class).collect(Collectors.toList());
 
 			if (!etudiants.isEmpty()) {
-				reponse = new Reponse<List<Personne>>(0, null, etudiants);
+				reponse = new Reponse<List<Etudiant>>(0, null, etudiants);
 			} else {
 				List<String> messages = new ArrayList<>();
 				messages.add("Pas d'étudiants enregistrées à ce jour");
-				reponse = new Reponse<List<Personne>>(3, messages, null);
+				reponse = new Reponse<List<Etudiant>>(3, messages, null);
 			}
 		} catch (Exception e) {
-			reponse = new Reponse<List<Personne>>(1, Static.getErreurforexception(e), null);
+			reponse = new Reponse<List<Etudiant>>(1, Static.getErreurforexception(e), null);
 		}
 		return jsonMapper.writeValueAsString(reponse);
 	}
@@ -198,44 +200,41 @@ public class EtudiantRestService {
 
 	//////////////////////////////
 	// supprimer des etudiant
-	public void spprimer(List<Personne> entities) {
-		modelPersonne.spprimer(entities);
+	public void spprimer(List<Etudiant> entities) {
+		modelEtudiant.spprimer(entities);
 	}
 
 	//////////////////////////////
 	// supprimer un etudiant par identifiant
 	public boolean supprimer(String id) {
-		return modelPersonne.supprimer(id);
+		return modelEtudiant.supprimer(id);
 	}
 
 	///////////////////////////
 	public boolean existe(String id) {
-		return modelPersonne.existe(id);
+		return modelEtudiant.existe(id);
 	}
 
 	//////////////////////////
 	public Long compter() {
-		return modelPersonne.compter();
+		return modelEtudiant.compter();
 	}
 
 	//////////////////////////
-	public Personne chercherParMatricule(String matricule) {
-		return modelPersonne.chercherParMatricule(matricule);
+	public Etudiant chercherParMatricule(String matricule) {
+		return modelEtudiant.chercherParMatricule(matricule);
 	}
 
 	//////////////////////////
-	public Personne chercherParIdentifiantS(String numCni) {
-		return modelPersonne.chercherParIdentifiantS(numCni);
+	public Etudiant chercherParIdentifiantS(String numCni) {
+		return modelEtudiant.chercherParIdentifiantS(numCni);
 	}
 
 	//////////////////////////
-	public List<Personne> chercherEtudiantParMc(String mc) {
-		return modelPersonne.chercherEtudiantParMc(mc);
+	public List<Etudiant> chercherEtudiantParMc(String mc) {
+		return modelEtudiant.chercherEtudiantParMc(mc);
 	}
 
-	//////////////////////////
-	public List<Personne> listAdministrateurs() {
-		return modelPersonne.listAdministrateurs();
-	}
+	
 
 }

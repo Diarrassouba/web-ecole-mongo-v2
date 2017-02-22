@@ -1,4 +1,4 @@
-package ci.kossovo.ecole.web.services;
+/*package ci.kossovo.ecole.web.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import ci.kossovo.ecole.entity.Adresse;
 import ci.kossovo.ecole.entity.Personne;
 import ci.kossovo.ecole.exceptions.InvalidPersonneException;
 import ci.kossovo.ecole.web.models.Reponse;
-import ci.kossovo.ecole.web.models.personne.ApplicationModelPersonne;
+import ci.kossovo.ecole.web.models.personne.ApplicationModelEtudiant;
 import ci.kossovo.ecole.web.models.personne.PostAjoutPersonne;
 import ci.kossovo.ecole.web.models.personne.PostModifPersonne;
 import ci.kossovo.ecole.web.utilitaires.Static;
@@ -29,7 +29,7 @@ import ci.kossovo.ecole.web.utilitaires.Static;
 @RestController
 public class PersonneRestService {
 	@Autowired
-	private ApplicationModelPersonne modelPersonne;
+	private ApplicationModelEtudiant modelPersonne;
 
 	@Autowired
 	private ObjectMapper jsonMapper;
@@ -180,3 +180,4 @@ public class PersonneRestService {
 	}
 
 }
+*/

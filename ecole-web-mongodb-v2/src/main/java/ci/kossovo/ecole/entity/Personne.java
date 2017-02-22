@@ -3,19 +3,7 @@
 //
 package ci.kossovo.ecole.entity;
 
-
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({ @Type(name = "PE", value = Personne.class), @Type(name = "AD", value = Administrateur.class),
-		@Type(name = "EN", value = Enseignant.class), @Type(name = "ET", value = Etudiant.class) })
-@Document(collection="personnes")
-public class Personne extends AbstractEntity {
+public abstract class Personne extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 
 	private String titre;
