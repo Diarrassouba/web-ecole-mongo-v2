@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,6 +74,7 @@ public class EtudiantRestService {
 		entity.setAdresse(ad);
 		entity.setPhoto(pe.getPhoto());
 		entity.setStatus(pe.getStatus());
+		entity.setNomComplet();
 
 		// formater la date qui est en String => html
 		String nais = pe.getDateNaissance();
@@ -127,6 +129,7 @@ public class EtudiantRestService {
 			et.setAdresse(ad);
 			et.setPhoto(post.getPhoto());
 			et.setMatricule(post.getMatricule());
+			et.setNomComplet();
 
 			// Formater la date string en type Date
 			String nais = post.getDateNaissance();
@@ -206,8 +209,34 @@ public class EtudiantRestService {
 
 	//////////////////////////////
 	// supprimer un etudiant par identifiant
-	public boolean supprimer(String id) {
-		return modelEtudiant.supprimer(id);
+	@DeleteMapping("/etudiants/{id}")
+	public String supprimer(@PathVariable("id") String id) throws JsonProcessingException {
+		//la reponse
+		Reponse<Boolean> reponse=null;
+		boolean erreur=false;
+		//on recupère le etudiant
+		if (!erreur) {
+			Reponse<Etudiant> reponseEtudiant=getEtudiant(id);
+			if (reponseEtudiant.getStatus()!=0) {
+				reponse=new Reponse<Boolean>(reponseEtudiant.getStatus(), reponseEtudiant.getMessages(), null);
+				erreur=true;
+				
+			}
+			
+		}
+		//etudiant existe donc
+		if (!erreur) {
+			//suppression
+			try {
+				reponse= new Reponse<Boolean>(0, null, modelEtudiant.supprimer(id));
+			} catch (Exception e) {
+				reponse= new Reponse<Boolean>(1, Static.getErreurforexception(e), null);
+			}
+			
+		}
+		
+		//la reponse
+		return jsonMapper.writeValueAsString(reponse);
 	}
 
 	///////////////////////////
